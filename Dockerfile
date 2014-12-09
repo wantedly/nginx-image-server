@@ -28,3 +28,18 @@ RUN mkdir -p /usr/src/ngx_small_light && \
     make install && \
     rm -rf /usr/src/ngx_small_light && \
     rm -rf /usr/src/nginx
+
+RUN mkdir -p /var/www/nginx-default && \
+    mkdir /var/www/nginx-default/images && \
+    mkdir /var/www/nginx-default/cache && \
+    mkdir /var/www/nginx-default/tmp && \
+    mkdir -p /var/log/nginx
+
+RUN touch /var/www/nginx-default/index.html
+COPY files/favicon.ico /var/www/nginx-default/favicon.ico
+COPY files/authorized_ip /etc/nginx/authorized_ip
+COPY files/cache_path /etc/nginx/cache_path
+COPY files/nginx.conf /etc/nginx/nginx.conf
+COPY files/image-server.conf /etc/nginx/conf.d/image-server.conf
+
+CMD ["/opt/nginx/sbin/nginx"]

@@ -1,0 +1,2 @@
+proxy_cache_path /var/www/nginx-default/cache levels=1:2 keys_zone=cache-space:4m max_size=50m inactive=120m;
+proxy_temp_path /var/www/nginx-default/tmp;
