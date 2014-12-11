@@ -52,7 +52,7 @@ COPY files/nginx.conf /etc/nginx/nginx.conf
 COPY files/mime.types /etc/nginx/mime.types
 
 # Add contents
-#COPY files/index.html /var/www/nginx/index.html
+COPY files/favicon.ico /var/www/nginx/favicon.ico
 
 EXPOSE 80
 EXPOSE 8090
