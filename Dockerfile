@@ -13,7 +13,8 @@ RUN apt-get update && \
       gettext \
       libpcre3 \
       libpcre3-dev \
-      libssl-dev && \
+      libssl-dev \
+      libperl-dev && \
     rm -rf /var/lib/apt/lists/*
 
 # Fetch and unarchive nginx source
@@ -34,6 +35,7 @@ RUN cd /tmp/nginx-${NGINX_VERSION} && \
       --conf-path=/etc/nginx/nginx.conf \
       --sbin-path=/opt/nginx/sbin/nginx \
       --with-http_stub_status_module \
+      --with-http_perl_module \
       --with-pcre \
       --add-module=/tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} && \
     make && \
