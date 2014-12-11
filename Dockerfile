@@ -5,11 +5,10 @@ ENV NGINX_VERSION 1.6.2
 
 RUN mkdir -p /etc/nginx && \
     mkdir -p /var/run && \
-    mkdir -p /etc/nginx/sites-available && \
-    mkdir -p /etc/nginx/sites-enabled && \
     mkdir -p /etc/nginx/conf.d && \
     mkdir -p /var/www/nginx-default
 
+# Install dependency packages
 RUN apt-get update && \
     apt-get install -y \
       binutils-doc \
@@ -21,13 +20,11 @@ RUN apt-get update && \
       libssl-dev && \
     rm -rf /var/lib/apt/lists/*
 
-COPY files/nginx.conf /etc/nginx/nginx.conf
-COPY files/mime.types /etc/nginx/mime.types
-COPY files/default.conf /etc/nginx/conf.d/default.conf
-COPY files/index.html /var/www/nginx-default/index.html
-
+# Fetch and unarchive nginx source
 ADD http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz /tmp/nginx-${NGINX_VERSION}.tar.gz
 RUN cd /tmp && tar zxf nginx-${NGINX_VERSION}.tar.gz
+
+# Compile nginx
 RUN cd /tmp/nginx-${NGINX_VERSION} && \
     ./configure \
       --prefix=/opt/nginx \
@@ -36,6 +33,19 @@ RUN cd /tmp/nginx-${NGINX_VERSION} && \
       --with-http_stub_status_module \
       --with-pcre && \
     make && \
-    make install
+    make install && \
+    rm -rf /tmp/nginx-${NGINX_VERSION}*
+
+# Add config files
+COPY files/nginx.conf          /etc/nginx/nginx.conf
+COPY files/mime.types          /etc/nginx/mime.types
+COPY files/default.conf        /etc/nginx/conf.d/default.conf
+COPY files/nginx_status.conf   /etc/nginx/conf.d/nginx_status.conf
+
+# Add contents
+COPY files/index.html /var/www/nginx-default/index.html
+
+EXPOSE 80
+EXPOSE 8090
 
 CMD ["/opt/nginx/sbin/nginx"]
