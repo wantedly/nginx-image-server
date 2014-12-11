@@ -1,0 +1,5 @@
+geo $remote_addr $authorized_ip {
+    default no;
+
+    127.0.0.1 yes;
+}
