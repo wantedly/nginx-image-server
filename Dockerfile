@@ -4,7 +4,7 @@ ENV NGINX_VERSION 1.6.2
 ENV NGX_SMALL_LIGHT_VERSION 0.6.3
 
 RUN apt-get update && \
-    apt-get install -y libpcre3 libpcre3-dev libssl-dev && \
+    apt-get install -y libpcre3 libpcre3-dev libssl-dev libperl-dev && \
     rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /usr/src/nginx && \
@@ -22,6 +22,7 @@ RUN mkdir -p /usr/src/ngx_small_light && \
       --conf-path=/etc/nginx/nginx.conf \
       --sbin-path=/opt/nginx/sbin/nginx \
       --with-http_stub_status_module \
+      --with-http_perl_module \
       --with-pcre \
       --add-module=/usr/src/ngx_small_light && \
     make && \
