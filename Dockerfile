@@ -4,11 +4,10 @@ MAINTAINER Seigo Uchida <spesnova@gmail.com> (@spesnova)
 ENV NGINX_VERSION 1.6.2
 
 RUN mkdir -p /etc/nginx && \
-    mkdir -p /var/log/nginx && \
     mkdir -p /var/run && \
     mkdir -p /etc/nginx/sites-available && \
     mkdir -p /etc/nginx/sites-enabled && \
-    mkdir -p /etc/nginx/conf.d
+    mkdir -p /etc/nginx/conf.d && \
     mkdir -p /var/www/nginx-default
 
 RUN apt-get update && \
