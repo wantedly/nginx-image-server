@@ -58,14 +58,13 @@ RUN cd /tmp/nginx-${NGINX_VERSION} && \
 RUN mkdir -p /etc/nginx && \
     mkdir -p /var/run && \
     mkdir -p /etc/nginx/conf.d && \
-    mkdir -p /var/www/nginx/{images,cache,tmp}
+    mkdir -p /var/www/nginx/cache && \
+    mkdir -p /var/www/nginx/images && \
+    mkdir -p /var/www/nginx/tmp
 
 # Add config files
-COPY files/nginx.conf /etc/nginx/nginx.conf
-COPY files/mime.types /etc/nginx/mime.types
-
-# Add contents
-COPY files/favicon.ico /var/www/nginx/favicon.ico
+COPY files/example-nginx.conf /etc/nginx/nginx.conf
+COPY files/example-mime.types /etc/nginx/mime.types
 
 EXPOSE 80 8090
 
