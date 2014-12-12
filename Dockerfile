@@ -54,7 +54,6 @@ COPY files/mime.types /etc/nginx/mime.types
 # Add contents
 COPY files/favicon.ico /var/www/nginx/favicon.ico
 
-EXPOSE 80
-EXPOSE 8090
+EXPOSE 80 8090
 
 CMD ["/opt/nginx/sbin/nginx"]
