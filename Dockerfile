@@ -17,6 +17,19 @@ RUN apt-get update && \
       libperl-dev && \
     rm -rf /var/lib/apt/lists/*
 
+# Build ImageMagick with WebP support
+RUN mkdir -p /tmp/imagemagick && \
+    cd /tmp/imagemagick && \
+    apt-get update && \
+    apt-get build-dep -y imagemagick && \
+    apt-get install -y libwebp-dev devscripts && \
+    apt-get source -y imagemagick && \
+    cd imagemagick-* && \
+    debuild -uc -us && \
+    dpkg -i ../*magick*.deb && \
+    rm -rf /tmp/imagemagick && \
+    rm -rf /var/lib/apt/lists/*
+
 # Fetch and unarchive nginx source
 ADD http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz /tmp/nginx-${NGINX_VERSION}.tar.gz
 RUN cd /tmp && tar zxf nginx-${NGINX_VERSION}.tar.gz
