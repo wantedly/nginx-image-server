@@ -1,0 +1,7 @@
+box: wercker-labs/docker
+build:
+  steps:
+    - script:
+        name: Check docker version
+        code: |
+          docker -v
