@@ -1,5 +1,5 @@
 # Nginx Image Server [![Docker Repository on Quay.io](https://quay.io/repository/wantedly/nginx-image-server/status "Docker Repository on Quay.io")](https://quay.io/repository/wantedly/nginx-image-server)
-Docker Image for [Nginx](http://nginx.org/) image processing server with [ngx_small_light](https://github.com/cubicdaiya/ngx_small_light).
+Docker Image for [Nginx](http://nginx.org/) image processing server with [ngx_small_light](https://github.com/cubicdaiya/ngx_small_light).  
 Image server can resize/crop/formatting (`png`, `webp`...etc) for images in local or AWS S3.
 
 Please see https://github.com/cubicdaiya/ngx_small_light for more information about image processing.
@@ -9,6 +9,7 @@ Please see https://github.com/cubicdaiya/ngx_small_light for more information ab
 * `latest`
  * Nginx 1.6.2
  * ngx_small_light 0.6.3
+ * ImageMagick 6.7.7-10 2014-12-11 Q16 with WebP support
 
 ## HOT TO USE
 
@@ -41,22 +42,20 @@ Then you can try image-processing via
 And `http://<YOUR-SERVER.com>:8090/status` retruns the nginx status.
 
 ### Custom configuration
-You can build new docker image includes your own `nginx.conf`:
+You can build a docker image includes your own `nginx.conf`:
 
 ```
 FROM quay.io/wantedly/nginx-image-server
 COPY nginx.conf /etc/nginx/nginx.conf
 ```
 
-Then, build with `docker build -t your-nginx-image-server .` and run:
+Then build with `docker build -t your-nginx-image-server .` and run:
 
 ```bash
 $ docker run \
     -d \
     --name your-nginx-image-server \
     -p 80:80 \
-    -p 8090:8090 \
-    -e "SERVER_NAME=image.example.com" \
     your-nginx-image-server
 ```
 
