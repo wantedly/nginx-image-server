@@ -6,7 +6,6 @@ ENV NGX_SMALL_LIGHT_VERSION 0.6.3
 
 # Install dependency packages
 RUN apt-get update && \
-    apt-get remove -y imagemagick && \
     apt-get install -y \
       binutils-doc \
       bison \
@@ -15,10 +14,13 @@ RUN apt-get update && \
       libpcre3 \
       libpcre3-dev \
       libssl-dev \
-      libwebp-dev \
       libperl-dev && \
-    mkdir -p /tmp/imagemagick && \
+    rm -rf /var/lib/apt/lists/*
+
+# Build ImageMagick with WebP support
+RUN mkdir -p /tmp/imagemagick && \
     cd /tmp/imagemagick && \
+    apt-get update && \
     apt-get build-dep -y imagemagick && \
     apt-get install -y libwebp-dev devscripts && \
     apt-get source -y imagemagick && \
