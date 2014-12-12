@@ -1,5 +1,8 @@
-# Nginx Image Server
-Docker Image for [Nginx](http://nginx.org/) image processing server(resize, crop, format) with [ngx_small_light](https://github.com/cubicdaiya/ngx_small_light).
+# Nginx Image Server [![Docker Repository on Quay.io](https://quay.io/repository/wantedly/nginx-image-server/status "Docker Repository on Quay.io")](https://quay.io/repository/wantedly/nginx-image-server)
+Docker Image for [Nginx](http://nginx.org/) image processing server with [ngx_small_light](https://github.com/cubicdaiya/ngx_small_light).
+Image server can resize/crop/formatting (`png`, `webp`...etc) for images in local or AWS S3.
+
+Please see https://github.com/cubicdaiya/ngx_small_light for more information about image processing.
 
 ## SUPPORTED TAGS
 
@@ -8,20 +11,36 @@ Docker Image for [Nginx](http://nginx.org/) image processing server(resize, crop
  * ngx_small_light 0.6.3
 
 ## HOT TO USE
-Trying this image quickly:
 
 ```bash
+# Getting the image
 $ docker pull quay.io/wantedly/nginx-image-server
+
+# Fetch example image to try image-processing local image
+$ curl -L https://raw.githubusercontent.com/wantedly/nginx-image-server/master/files/example.jpg > \
+    /tmp/example.jpg
+
+# Start the image server
 $ docker run \
-    -d \
+    --rm \
+    -it \
     --name nginx-image-server \
     -p 80:80 \
     -p 8090:8090 \
+    -v /tmp/example.jpg:/var/www/nginx/images/example.jpg \
     -e "SERVER_NAME=image.example.com" \
+    -e "S3_HOST=<YOUR-BUCKET-NAME>.s3.amazonaws.com" \
     quay.io/wantedly/nginx-image-server
 ```
 
-### Using your own configuration
+Then you can try image-processing via
+
+* **Images in S3**: `http://<YOUR-SERVER.com>/small_light(dh=400,da=l,ds=s)/<PATH-TO-IMAGE-IN-S3>`
+* **Images in Local**: `http://<YOUR-SERVER.com>/local/small_light(dh=400,da=l,ds=s)/images/example.jpg`
+
+And `http://<YOUR-SERVER.com>:8090/status` retruns the nginx status.
+
+### Custom configuration
 You can build new docker image includes your own `nginx.conf`:
 
 ```
@@ -41,26 +60,8 @@ $ docker run \
     your-nginx-image-server
 ```
 
-### Recommended configurations
-There are some recommended configurations to run Nginx in Docker Container.
-
-* `daemon off;`
-
-Run Nginx in the foreground to prevent your container will stop immediately after starting.
-
-* `access_log /dev/stdout;`
-* `error_log /dev/stdout info;`
-
-Log to STDOUT to and send your logs to an external storage like S3 via fluentd or a service like PaperTrail.
-This practice is followoing "Treat logs as event streams" in [12factor apps](http://12factor.net/logs).
-It helps your container to be disposable.
-
-* `env S3_HOST;` and `perl_set $s3_host_from_env 'sub { return $ENV{"S3_HOST"}; }';`
-
-If you have to set secret key or some config different between development and production, use environment variables.
-This practice is following "Store config in the environment" in [12factor apps](http://12factor.net/config).
-
-You can see example configuration for these in `nginx.conf` under `example-files/` in this repo.
+Be sure to include `daemon off;` in your custom configuration to run Nginx in the foreground.
+Otherwise your container will stop immediately after starting.
 
 ## LICENSE
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
