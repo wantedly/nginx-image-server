@@ -1,5 +1,5 @@
 # Nginx Image Server [![Docker Repository on Quay.io](https://quay.io/repository/wantedly/nginx-image-server/status "Docker Repository on Quay.io")](https://quay.io/repository/wantedly/nginx-image-server)
-Docker Image for [Nginx](http://nginx.org/) image processing server with [ngx_small_light](https://github.com/cubicdaiya/ngx_small_light).  
+Docker Image for [Nginx](http://nginx.org/) image processing server with [ngx_small_light](https://github.com/cubicdaiya/ngx_small_light).
 Image server can resize/crop/formatting (`png`, `webp`...etc) for images in local or AWS S3.
 
 Please see https://github.com/cubicdaiya/ngx_small_light for more information about image processing.
@@ -63,8 +63,10 @@ Be sure to include `daemon off;` in your custom configuration to run Nginx in th
 Otherwise your container will stop immediately after starting.
 
 ## TEST (experimentally)
+ [![wercker status](https://app.wercker.com/status/e1d50221515bacea622f6a6f5f0adde6/s/master "wercker status")](https://app.wercker.com/project/bykey/e1d50221515bacea622f6a6f5f0adde6)
+
 ### Feature(behavior) test
-We're trying behavior test for this image using [infrataster](https://github.com/ryotarai/infrataster).  
+We're trying behavior test for this image using [infrataster](https://github.com/ryotarai/infrataster).
 Test files are under `test/feature` directory. You can run this test with follwing script:
 
 ```bash
@@ -72,7 +74,7 @@ $ script/cibuild
 ```
 
 ### Performance test
-We're trying performance test for this image using [locust](http://locust.io/).  
+We're trying performance test for this image using [locust](http://locust.io/).
 Test files are under `test/performance` directory. You can run locust with follwing script:
 
 ```bash

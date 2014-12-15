@@ -1,0 +1,162 @@
+#cloud-config
+
+coreos:
+  update:
+    reboot-strategy: off
+    group: stable
+  units:
+    - name: journal-router-short.service
+      command: start
+      content: |
+        [Unit]
+        Description=Journal Router (short)
+
+        [Service]
+        TimeoutStartSec=0
+        ExecStart=/bin/sh -c '/usr/bin/journalctl -o short -f | sed \"s/^/<%= ENV["LOGENTRIES_TOKEN_JOURNAL_SHORT"] %> \\0/g\" | ncat data.logentries.com 10000'
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: journal-router-json.service
+      command: start
+      content: |
+        [Unit]
+        Description=Journal Router (json)
+
+        [Service]
+        TimeoutStartSec=0
+        ExecStart=/bin/sh -c '/usr/bin/journalctl -o json -f | sed \"s/^/<%= ENV["LOGENTRIES_TOKEN_JOURNAL_JSON"] %> \\0/g\" | ncat data.logentries.com 10000'
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: settimezone.service
+      command: start
+      content: |
+        [Unit]
+        Description=Set the timezone
+
+        [Service]
+        ExecStart=/usr/bin/timedatectl set-timezone Asia/Tokyo
+        RemainAfterExit=yes
+        Type=oneshot
+    - name: docker-tcp.socket
+      command: start
+      enable: true
+      content: |
+        [Unit]
+        Description=Docker Socket for the API
+
+        [Socket]
+        ListenStream=2375
+        Service=docker.service
+        BindIPv6Only=both
+
+        [Install]
+        WantedBy=sockets.target
+    - name: registry.service
+      command: start
+      enable: true
+      content: |
+        [Unit]
+        Description=Private Docker Registry
+        After=docker.service
+        Requires=docker.service
+
+        [Service]
+        TimeoutStartSec=0
+        ExecStartPre=-/usr/bin/docker kill registry
+        ExecStartPre=-/usr/bin/docker rm registry
+        ExecStartPre=/usr/bin/docker pull registry:0.7.3
+        ExecStart=/usr/bin/docker run --name registry -h %H -e SETTINGS_FLAVOR=prod -e AWS_KEY=<%= ENV["REGISTRY_AWS_KEY"] %> -e AWS_SECRET=<%= ENV["REGISTRY_AWS_SECRET"] %> -e AWS_BUCKET=<%= ENV["REGISTRY_AWS_BUCKET"] %> -e AWS_SECURE=true -e DOCKER_REGISTRY_CONFIG=/docker-registry/config/config_sample.yml -e STORAGE_PATH=/ -e SEARCH_BACKEND=sqlalchemy -e GUNICORN_WORKERS=3 -e LOGLEVEL=info -p 5000:5000 registry:0.7.3 docker-registry
+        ExecStop=/usr/bin/docker stop registry
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: dd-agent.service
+      command: start
+      enable: true
+      content: |
+        [Unit]
+        Description=Datadog Agent
+        After=docker.service
+        Requires=docker.service
+
+        [Service]
+        TimeoutStartSec=0
+        ExecStartPre=-/usr/bin/docker kill dd-agent
+        ExecStartPre=-/usr/bin/docker rm dd-agent
+        ExecStartPre=/usr/bin/docker pull datadog/docker-dd-agent:latest
+        ExecStart=/usr/bin/docker run --privileged --name dd-agent -h %H -v /var/run/docker.sock:/var/run/docker.sock -v /proc/mounts:/host/proc/mounts:ro -v /sys/fs/cgroup/:/host/sys/fs/cgroup:ro -e API_KEY=<%= ENV["DATADOG_API_KEY"] %> datadog/docker-dd-agent:latest
+        ExecStop=/usr/bin/docker stop dd-agent
+
+        [Install]
+        WantedBy=multi-user.target
+    - name: nginx-image-server.service
+      command: start
+      enable: true
+      content: |
+        [Unit]
+        Description=Nginx Image Server
+        After=docker.service
+        Requires=docker.service
+
+        [Service]
+        TimeoutStartSec=0
+        ExecStartPre=-/usr/bin/docker kill nginx-image-server
+        ExecStartPre=-/usr/bin/docker rm nginx-image-server
+        ExecStartPre=/usr/bin/docker pull quay.io/wantedly/nginx-image-server:latest
+        ExecStart=/usr/bin/docker run --name nginx-image-server -p 80:80 -p 8090:8090 -e SERVER_NAME=<%= ENV["SERVER_NAME"] %> -e S3_HOST=<%= ENV["S3_HOST"] %> quay.io/wantedly/nginx-image-server
+        ExecStop=/usr/bin/docker stop nginx-image-server
+
+        [Install]
+        WantedBy=multi-user.target
+users:
+  - name: spesnova
+    coreos-ssh-import-github: spesnova
+    groups:
+      - sudo
+      - docker
+  - name: awakia
+    coreos-ssh-import-github: awakia
+    groups:
+      - sudo
+      - docker
+  - name: luvtechno
+    coreos-ssh-import-github: luvtechno
+    groups:
+      - docker
+write_files:
+  - path: /etc/ssh/sshd_config
+    permissions: 0600
+    owner: root:root
+    content: |
+      # Use most defaults for sshd configuration.
+      UsePrivilegeSeparation sandbox
+      Subsystem sftp internal-sftp
+
+      PermitRootLogin no
+      PasswordAuthentication no
+      ChallengeResponseAuthentication no
+  - path: /etc/ntp.conf
+    content: |
+      # Common pool
+      server 0.pool.ntp.org
+      server 1.pool.ntp.org
+      server 2.pool.ntp.org
+      server 3.pool.ntp.org
+
+      # - Allow only time queries, at a limited rate.
+      # - Allow all local queries (IPv4, IPv6)
+      restrict default nomodify nopeer noquery limited kod
+      restrict 127.0.0.1
+      restrict [::1]
+  - path: /home/core/.dockercfg
+    permissions: 0644
+    owner: core:core
+    content: |
+      {
+        "quay.io": {
+          "auth": "<%= ENV["DOCKER_QUAY_AUTH"]%>",
+          "email": ""
+        }
+      }

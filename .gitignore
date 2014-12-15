@@ -1,2 +1,4 @@
 .env
 locustfile.pyc
+user-data
+.vagrant
