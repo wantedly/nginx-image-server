@@ -1,0 +1,23 @@
+#!/bin/sh
+#
+# Usage: script/run_locust <LOCUST_ARGS>
+# Description: run tester container
+# Example:
+#   script/run_locust -f locustfile.py -H localhost --no-web -c 10 -r 1 -n 30
+#   script/run_locust -f locustfile.py -H localhost
+#
+
+BASE_DIRECTORY=`pwd`
+LOCUST_ARGS=$@
+
+cd ${BASE_DIRECTORY}/test/performance
+docker kill locust > /dev/null 2>&1 || true
+docker rm   locust > /dev/null 2>&1 || true
+docker run \
+  --rm \
+  -it \
+  --name locust \
+  -p 8089:8089 \
+  -v ${BASE_DIRECTORY}/test/performance:/test \
+  locust \
+  ${LOCUST_ARGS}
