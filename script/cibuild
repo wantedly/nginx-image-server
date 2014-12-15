@@ -19,28 +19,10 @@ cd ${BASE_DIRECTORY}
 docker build -t target .
 
 echo "==> Running target..."
-cd ${BASE_DIRECTORY}
-docker kill target > /dev/null 2>&1 || true
-docker rm   target > /dev/null 2>&1 || true
-docker run \
-  -d \
-  --name target \
-  -p 80:80 \
-  -p 8090:8090 \
-  -v ${BASE_DIRECTORY}/files/example.jpg:/var/www/nginx/images/example.jpg \
-  -e "SERVER_NAME=${SERVER_NAME}" \
-  -e "S3_HOST=${S3_HOST}" \
-  target
+script/run_target -d
 
 echo "==> Running tester..."
-cd ${BASE_DIRECTORY}/test/feature
-docker kill tester > /dev/null 2>&1 || true
-docker rm   tester > /dev/null 2>&1 || true
-docker run \
-  --rm \
-  --name tester \
-  -e TARGET_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' target) \
-  tester
+script/run_tester
 
 echo "==> Cleaning up..."
 docker kill target > /dev/null 2>&1 || true

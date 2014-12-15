@@ -1,0 +1,29 @@
+#!/bin/sh
+#
+# Usage: script/run_target <MODE>
+# Description: run target container in the background
+# Example:
+#   $ script/run_target -d
+#
+
+BASE_DIRECTORY=`pwd`
+MODE="--rm -it"
+
+if [ $# -eq 1 ]; then
+  if [ $1 = "-d" ]; then
+    MODE="-d"
+  fi
+fi
+
+cd ${BASE_DIRECTORY}
+docker kill target > /dev/null 2>&1 || true
+docker rm   target > /dev/null 2>&1 || true
+docker run \
+  ${MODE} \
+  --name target \
+  -p 80:80 \
+  -p 8090:8090 \
+  -v ${BASE_DIRECTORY}/files/example.jpg:/var/www/nginx/images/example.jpg \
+  -e "SERVER_NAME=${SERVER_NAME}" \
+  -e "S3_HOST=${S3_HOST}" \
+  target
