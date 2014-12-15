@@ -62,5 +62,32 @@ $ docker run \
 Be sure to include `daemon off;` in your custom configuration to run Nginx in the foreground.
 Otherwise your container will stop immediately after starting.
 
+## TEST (experimentally)
+### Feature(behavior) test
+We're trying behavior test for this image using [infrataster](https://github.com/ryotarai/infrataster).  
+Test files are under `test/feature` directory. You can run this test with follwing script:
+
+```bash
+$ script/cibuild
+```
+
+### Performance test
+We're trying performance test for this image using [locust](http://locust.io/).  
+Test files are under `test/performance` directory. You can run locust with follwing script:
+
+```bash
+# Run target container
+$ script/run_target
+
+# Export target IP
+$ export TARGET_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' target)
+
+# Run locust as WebTool
+$ script/run_locust -f locustfile.py -H http://${TARGET_IP}
+
+# Run locust as CLI
+$ script/run_locust -f locustfile.py -H http://${TARGET_IP} --no-web -c 5 -r 1 -n 10
+```
+
 ## LICENSE
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
