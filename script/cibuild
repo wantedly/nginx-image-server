@@ -1,0 +1,49 @@
+#!/bin/sh
+#
+# Usage: script/cibuild
+# Description: script to run test
+#
+
+set -e
+
+# this script should be run in project root
+BASE_DIRECTORY=`pwd`
+SERVER_NAME="image.example.com"
+
+echo "==> Building tester..."
+cd ${BASE_DIRECTORY}/test
+docker build -t tester .
+
+echo "==> Building target..."
+cd ${BASE_DIRECTORY}
+docker build -t target .
+
+echo "==> Running target..."
+cd ${BASE_DIRECTORY}
+docker kill target > /dev/null 2>&1 || true
+docker rm   target > /dev/null 2>&1 || true
+docker run \
+  -d \
+  --name target \
+  -p 80:80 \
+  -p 8090:8090 \
+  -v ${BASE_DIRECTORY}/files/example.jpg:/var/www/nginx/images/example.jpg \
+  -e "SERVER_NAME=${SERVER_NAME}" \
+  -e "S3_HOST=${S3_HOST}" \
+  target
+
+echo "==> Running tester..."
+cd ${BASE_DIRECTORY}/test
+docker kill tester > /dev/null 2>&1 || true
+docker rm   tester > /dev/null 2>&1 || true
+docker run \
+  --rm \
+  --name tester \
+  -e TARGET_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' target) \
+  tester
+
+echo "==> Cleaning up..."
+docker kill target > /dev/null 2>&1 || true
+docker rm   target > /dev/null 2>&1 || true
+docker kill tester > /dev/null 2>&1 || true
+docker rm   tester > /dev/null 2>&1 || true

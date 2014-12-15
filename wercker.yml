@@ -5,3 +5,35 @@ build:
         name: Check docker version
         code: |
           docker -v
+    - script:
+        name: Build tester
+        code: |
+          cd ${WERCKER_SOURCE_DIR}/test
+          docker build -t tester .
+    - script:
+        name: Build target
+        code: |
+          cd ${WERCKER_SOURCE_DIR}
+          docker build -t target .
+    - script:
+        name: Run target
+        code: >
+          cd ${WERCKER_SOURCE_DIR};
+          docker run
+          -d
+          --name target
+          -p 80:80
+          -p 8090:8090
+          -v ${WERCKER_SOURCE_DIR}/files/example.jpg:/var/www/nginx/images/example.jpg
+          -e "SERVER_NAME=${SERVER_NAME}"
+          -e "S3_HOST=${S3_HOST}"
+          target
+    - script:
+        name: Run tester
+        code: >
+          cd ${WERCKER_SOURCE_DIR}/test;
+          docker run
+          --rm
+          --name tester
+          -e TARGET_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' target)
+          tester
