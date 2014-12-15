@@ -8,7 +8,7 @@ build:
     - script:
         name: Build tester
         code: |
-          cd ${WERCKER_SOURCE_DIR}/test
+          cd ${WERCKER_SOURCE_DIR}/test/feature
           docker build -t tester .
     - script:
         name: Build target
@@ -31,7 +31,7 @@ build:
     - script:
         name: Run tester
         code: >
-          cd ${WERCKER_SOURCE_DIR}/test;
+          cd ${WERCKER_SOURCE_DIR}/test/feature;
           docker run
           --rm
           --name tester
