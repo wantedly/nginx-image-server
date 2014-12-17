@@ -2,6 +2,6 @@
 .gitignore
 LICENSE
 README.md
-files/example.jpg
+examples
 test
 wercker.yml
