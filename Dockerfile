@@ -31,12 +31,13 @@ RUN mkdir -p /tmp/imagemagick && \
     rm -rf /var/lib/apt/lists/*
 
 # Fetch and unarchive nginx source
-ADD http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz /tmp/nginx-${NGINX_VERSION}.tar.gz
-RUN cd /tmp && tar zxf nginx-${NGINX_VERSION}.tar.gz
+RUN curl -L http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz > /tmp/nginx-${NGINX_VERSION}.tar.gz && \
+    cd /tmp && \
+    tar zxf nginx-${NGINX_VERSION}.tar.gz
 
 # Fetch and unarchive ngx_small_light module
-ADD https://github.com/cubicdaiya/ngx_small_light/archive/v${NGX_SMALL_LIGHT_VERSION}.tar.gz /tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION}.tar.gz
-RUN cd /tmp && \
+RUN curl -L https://github.com/cubicdaiya/ngx_small_light/archive/v${NGX_SMALL_LIGHT_VERSION}.tar.gz > /tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION}.tar.gz && \
+    cd /tmp && \
     tar zxf ngx_small_light-${NGX_SMALL_LIGHT_VERSION}.tar.gz && \
     cd /tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} && \
     ./setup
