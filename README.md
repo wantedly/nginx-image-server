@@ -18,7 +18,7 @@ Please see https://github.com/cubicdaiya/ngx_small_light for more information ab
 $ docker pull quay.io/wantedly/nginx-image-server
 
 # Fetch example image to try image-processing local image
-$ curl -L https://raw.githubusercontent.com/wantedly/nginx-image-server/master/files/example.jpg > \
+$ curl -L https://raw.githubusercontent.com/wantedly/nginx-image-server/master/examples/example.jpg > \
     /tmp/example.jpg
 
 # Start the image server
