@@ -25,6 +25,7 @@ RUN mkdir -p /tmp/imagemagick && \
     apt-get install -y libwebp-dev devscripts && \
     apt-get source -y imagemagick && \
     cd imagemagick-* && \
+    sed -ie "/MagickDocumentPath/a --disable-openmp \\\\" debian/rules && \
     debuild -uc -us && \
     dpkg -i ../*magick*.deb && \
     rm -rf /tmp/imagemagick && \
