@@ -1,6 +1,6 @@
 # Nginx Image Server [![Docker Repository on Quay.io](https://quay.io/repository/wantedly/nginx-image-server/status "Docker Repository on Quay.io")](https://quay.io/repository/wantedly/nginx-image-server)
-Docker Image for [Nginx](http://nginx.org/) image processing server with [ngx_small_light](https://github.com/cubicdaiya/ngx_small_light).
-Image server can resize/crop/formatting (`png`, `webp`...etc) for images in local or AWS S3.
+Docker Image for [Nginx](http://nginx.org/) server for image processing with [ngx_small_light](https://github.com/cubicdaiya/ngx_small_light).
+It supports resizing/cropping/formatting (`png`, `webp`...etc) of images stored in local storages or AWS S3.
 
 Please see https://github.com/cubicdaiya/ngx_small_light for more information about image processing.
 
@@ -14,10 +14,10 @@ Please see https://github.com/cubicdaiya/ngx_small_light for more information ab
 ## HOW TO USE
 
 ```bash
-# Getting the image
+# Get the docker image
 $ docker pull quay.io/wantedly/nginx-image-server
 
-# Fetch example image to try image-processing local image
+# Fetch an example image to try image-processing local image
 $ curl -L https://raw.githubusercontent.com/wantedly/nginx-image-server/master/examples/example.jpg > \
     /tmp/example.jpg
 
@@ -34,7 +34,7 @@ $ docker run \
     quay.io/wantedly/nginx-image-server
 ```
 
-Then you can try image-processing via
+Then you can try image-processing by accessing
 
 * **Images in S3**: `http://<YOUR-SERVER.com>/small_light(dh=400,da=l,ds=s)/<PATH-TO-IMAGE-IN-S3>`
 * **Images in Local**: `http://<YOUR-SERVER.com>/local/small_light(dh=400,da=l,ds=s)/images/example.jpg`
