@@ -11,7 +11,7 @@ Please see https://github.com/cubicdaiya/ngx_small_light for more information ab
  * ngx_small_light 0.6.3
  * ImageMagick 6.7.7-10 2014-12-11 Q16 with WebP support
 
-## HOT TO USE
+## HOW TO USE
 
 ```bash
 # Getting the image
