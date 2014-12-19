@@ -1,6 +1,6 @@
 # Nginx Image Server [![Docker Repository on Quay.io](https://quay.io/repository/wantedly/nginx-image-server/status "Docker Repository on Quay.io")](https://quay.io/repository/wantedly/nginx-image-server)
-Docker Image for [Nginx](http://nginx.org/) image processing server with [ngx_small_light](https://github.com/cubicdaiya/ngx_small_light).  
-Image server can resize/crop/formatting (`png`, `webp`...etc) for images in local or AWS S3.
+Docker Image for [Nginx](http://nginx.org/) server for image processing with [ngx_small_light](https://github.com/cubicdaiya/ngx_small_light).
+It supports resizing/cropping/formatting (`png`, `webp`...etc) of images stored in local storages or AWS S3.
 
 Please see https://github.com/cubicdaiya/ngx_small_light for more information about image processing.
 
@@ -11,13 +11,13 @@ Please see https://github.com/cubicdaiya/ngx_small_light for more information ab
  * ngx_small_light 0.6.3
  * ImageMagick 6.7.7-10 2014-12-11 Q16 with WebP support
 
-## HOT TO USE
+## HOW TO USE
 
 ```bash
-# Getting the image
+# Get the docker image
 $ docker pull quay.io/wantedly/nginx-image-server
 
-# Fetch example image to try image-processing local image
+# Fetch an example image to try image-processing local image
 $ curl -L https://raw.githubusercontent.com/wantedly/nginx-image-server/master/examples/example.jpg > \
     /tmp/example.jpg
 
@@ -34,7 +34,7 @@ $ docker run \
     quay.io/wantedly/nginx-image-server
 ```
 
-Then you can try image-processing via
+Then you can try image-processing by accessing
 
 * **Images in S3**: `http://<YOUR-SERVER.com>/small_light(dh=400,da=l,ds=s)/<PATH-TO-IMAGE-IN-S3>`
 * **Images in Local**: `http://<YOUR-SERVER.com>/local/small_light(dh=400,da=l,ds=s)/images/example.jpg`
@@ -66,7 +66,7 @@ Otherwise your container will stop immediately after starting.
 [![wercker status](https://app.wercker.com/status/e1d50221515bacea622f6a6f5f0adde6/s/master "wercker status")](https://app.wercker.com/project/bykey/e1d50221515bacea622f6a6f5f0adde6)
 
 ### Feature(behavior) test
-We're trying behavior test for this image using [infrataster](https://github.com/ryotarai/infrataster).  
+We're trying behavior test for this image using [infrataster](https://github.com/ryotarai/infrataster).
 Test files are under `test/feature` directory. You can run this test with follwing script:
 
 ```bash
@@ -74,7 +74,7 @@ $ script/cibuild
 ```
 
 ### Performance test
-We're trying performance test for this image using [locust](http://locust.io/).  
+We're trying performance test for this image using [locust](http://locust.io/).
 Test files are under `test/performance` directory. You can run locust with follwing script:
 
 ```bash
