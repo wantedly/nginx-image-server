@@ -46,6 +46,7 @@ then
 else
   echo "  x You need to install Vagrant plugin 'dotenv':"
   echo "    $ vagrant plugin install dotenv"
+  exit 1
 fi
 
 #
