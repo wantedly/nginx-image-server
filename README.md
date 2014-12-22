@@ -74,6 +74,8 @@ $ cp .env.sample .env
 # .env
 TIMEZONE=Asia/Tokyo
 ```
+
+```
 $ vagrant up
 $ vi Dockerfile
 
