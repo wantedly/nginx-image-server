@@ -67,6 +67,13 @@ Otherwise your container will stop immediately after starting.
 ```bash
 # on your local machine
 $ git clone https://github.com/wantedly/nginx-image-server.git && cd nginx-image-server
+$ cp .env.sample .env
+```
+
+```
+# .env
+TIMEZONE=Asia/Tokyo
+```
 $ vagrant up
 $ vi Dockerfile
 
