@@ -3,7 +3,7 @@ MAINTAINER Seigo Uchida <spesnova@gmail.com> (@spesnova)
 
 ENV NGINX_VERSION 1.6.2
 ENV NGX_SMALL_LIGHT_VERSION 0.6.3
-ENV IMAGEMAGICK_VERSION 6.8.5
+ENV IMAGEMAGICK_VERSION 6.8.5-5
 
 # Install dependency packages
 RUN apt-get update && \
@@ -24,7 +24,8 @@ RUN mkdir -p /tmp/imagemagick && \
     apt-get update && \
     apt-get build-dep -y imagemagick && \
     apt-get install -y libwebp-dev devscripts checkinstall && \
-    curl -L http://www.imagemagick.org/download/ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz > ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz && \
+    curl -L https://launchpad.net/imagemagick/main/${IMAGEMAGICK_VERSION}/+download/ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz > \
+      ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz && \
     tar zxf ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz && \
     cd ImageMagick-${IMAGEMAGICK_VERSION} && \
     ./configure \
