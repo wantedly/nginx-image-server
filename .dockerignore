@@ -5,3 +5,7 @@ README.md
 examples
 test
 wercker.yml
+Vagrantfile
+config.rb
+user-data.erb.yml
+user-data

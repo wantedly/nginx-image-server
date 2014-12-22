@@ -1,0 +1,58 @@
+#!/bin/bash
+#
+# bootstrap
+#
+# Get readly to develop
+
+set -e
+
+#
+# Welcome message
+#
+echo ""
+echo "  nginx-image-server"
+echo ""
+
+#
+# Check for VirtualBox
+#
+if test ! $(which virtualbox)
+then
+  echo "  x You need to install VirtualBox."
+  echo "    You can download it from https://www.virtualbox.org/wiki/Downloads"
+  exit 1
+else
+  echo "  + VirtualBox found."
+fi
+
+#
+# Check for Vagrant
+#
+if test ! $(which vagrant)
+then
+  echo "  x You need to install Vagrant."
+  echo "    You can download it from http://www.vagrantup.com/downloads.html"
+  exit 1
+else
+  echo "  + Vagrant found."
+fi
+
+#
+# Install vagrant plugin
+#
+if [[ $(vagrant plugin list) =~ dotenv ]]
+then
+  echo "  + Vagrant plugin 'dotenv' found."
+else
+  echo "  x You need to install Vagrant plugin 'dotenv':"
+  echo "    $ vagrant plugin install dotenv"
+  exit 1
+fi
+
+#
+# Startup instructions
+#
+echo ""
+echo "  Good work. We're ready."
+
+exit 0
