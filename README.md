@@ -67,6 +67,7 @@ Otherwise your container will stop immediately after starting.
 ```bash
 # on your local machine
 $ git clone https://github.com/wantedly/nginx-image-server.git && cd nginx-image-server
+$ script/bootstrap
 $ cp .env.sample .env
 ```
 
