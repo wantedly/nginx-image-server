@@ -62,6 +62,22 @@ $ docker run \
 Be sure to include `daemon off;` in your custom configuration to run Nginx in the foreground.
 Otherwise your container will stop immediately after starting.
 
+## HOW TO DEVELOP
+
+```bash
+# on your local machine
+$ git clone https://github.com/wantedly/nginx-image-server.git && cd nginx-image-server
+$ vagrant up
+$ vagrant ssh
+
+# login to VM and try your changes
+$ cd share
+$ vi Dockerfile
+$ docker build -t target .
+$ script/test
+```
+
+
 ## TEST (experimentally)
 [![wercker status](https://app.wercker.com/status/e1d50221515bacea622f6a6f5f0adde6/s/master "wercker status")](https://app.wercker.com/project/bykey/e1d50221515bacea622f6a6f5f0adde6)
 
@@ -70,7 +86,7 @@ We're trying behavior test for this image using [infrataster](https://github.com
 Test files are under `test/feature` directory. You can run this test with follwing script:
 
 ```bash
-$ script/cibuild
+$ script/test
 ```
 
 ### Performance test
