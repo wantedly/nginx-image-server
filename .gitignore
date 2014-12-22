@@ -1,3 +1,5 @@
 .env
 .DS_Store
 locustfile.pyc
+user-data
+.vagrant
