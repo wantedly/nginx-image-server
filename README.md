@@ -68,13 +68,13 @@ Otherwise your container will stop immediately after starting.
 # on your local machine
 $ git clone https://github.com/wantedly/nginx-image-server.git && cd nginx-image-server
 $ vagrant up
-$ vagrant ssh
-
-# login to VM and try your changes
-$ cd share
 $ vi Dockerfile
-$ docker build -t target .
-$ script/test
+
+# login to VM and test it
+$ vagrant ssh
+@core-01 $ cd share
+@core-01 $ docker build -t target .
+@core-01 $ script/test
 ```
 
 
