@@ -30,6 +30,8 @@ RUN mkdir -p /tmp/imagemagick && \
     cd ImageMagick-${IMAGEMAGICK_VERSION} && \
     ./configure \
       --prefix=/usr \
+      --sysconfdir=/etc \
+      --libdir=/usr/lib/x86_64-linux-gnu \
       --enable-shared \
       --with-modules \
       --disable-openmp \
