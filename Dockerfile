@@ -3,6 +3,7 @@ MAINTAINER Seigo Uchida <spesnova@gmail.com> (@spesnova)
 
 ENV NGINX_VERSION 1.6.2
 ENV NGX_SMALL_LIGHT_VERSION 0.6.3
+ENV IMAGEMAGICK_VERSION 6.8.5-5
 
 # Install dependency packages
 RUN apt-get update && \
@@ -22,12 +23,23 @@ RUN mkdir -p /tmp/imagemagick && \
     cd /tmp/imagemagick && \
     apt-get update && \
     apt-get build-dep -y imagemagick && \
-    apt-get install -y libwebp-dev devscripts && \
-    apt-get source -y imagemagick && \
-    cd imagemagick-* && \
-    sed -ie "/MagickDocumentPath/a --disable-openmp \\\\" debian/rules && \
-    debuild -uc -us && \
-    dpkg -i ../*magick*.deb && \
+    apt-get install -y libwebp-dev devscripts checkinstall && \
+    curl -L https://launchpad.net/imagemagick/main/${IMAGEMAGICK_VERSION}/+download/ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz > \
+      ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz && \
+    tar zxf ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz && \
+    cd ImageMagick-${IMAGEMAGICK_VERSION} && \
+    ./configure \
+      --prefix=/usr \
+      --sysconfdir=/etc \
+      --libdir=/usr/lib/x86_64-linux-gnu \
+      --enable-shared \
+      --with-modules \
+      --disable-openmp \
+      --with-webp=yes \
+      LDFLAGS=-L/usr/local/lib \
+      CPPFLAGS=-I/usr/local/include && \
+    make && \
+    checkinstall -y && \
     rm -rf /tmp/imagemagick && \
     rm -rf /var/lib/apt/lists/*
 
