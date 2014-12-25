@@ -24,10 +24,10 @@ RUN mkdir -p /tmp/imagemagick && \
     apt-get update && \
     apt-get build-dep -y imagemagick && \
     apt-get install -y libwebp-dev devscripts checkinstall && \
-    curl -L https://launchpad.net/imagemagick/main/${IMAGEMAGICK_VERSION}/+download/ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz > \
-      ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz && \
-    tar zxf ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz && \
-    cd ImageMagick-${IMAGEMAGICK_VERSION} && \
+    curl -L https://launchpad.net/imagemagick/main/$IMAGEMAGICK_VERSION/+download/ImageMagick-$IMAGEMAGICK_VERSION.tar.gz > \
+      ImageMagick-$IMAGEMAGICK_VERSION.tar.gz && \
+    tar zxf ImageMagick-$IMAGEMAGICK_VERSION.tar.gz && \
+    cd ImageMagick-$IMAGEMAGICK_VERSION && \
     ./configure \
       --prefix=/usr \
       --sysconfdir=/etc \
@@ -44,19 +44,19 @@ RUN mkdir -p /tmp/imagemagick && \
     rm -rf /var/lib/apt/lists/*
 
 # Fetch and unarchive nginx source
-RUN curl -L http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz > /tmp/nginx-${NGINX_VERSION}.tar.gz && \
+RUN curl -L http://nginx.org/download/nginx-$NGINX_VERSION.tar.gz > /tmp/nginx-$NGINX_VERSION.tar.gz && \
     cd /tmp && \
-    tar zxf nginx-${NGINX_VERSION}.tar.gz
+    tar zxf nginx-$NGINX_VERSION.tar.gz
 
 # Fetch and unarchive ngx_small_light module
-RUN curl -L https://github.com/cubicdaiya/ngx_small_light/archive/v${NGX_SMALL_LIGHT_VERSION}.tar.gz > /tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION}.tar.gz && \
+RUN curl -L https://github.com/cubicdaiya/ngx_small_light/archive/v$NGX_SMALL_LIGHT_VERSION.tar.gz > /tmp/ngx_small_light-$NGX_SMALL_LIGHT_VERSION.tar.gz && \
     cd /tmp && \
-    tar zxf ngx_small_light-${NGX_SMALL_LIGHT_VERSION}.tar.gz && \
-    cd /tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} && \
+    tar zxf ngx_small_light-$NGX_SMALL_LIGHT_VERSION.tar.gz && \
+    cd /tmp/ngx_small_light-$NGX_SMALL_LIGHT_VERSION && \
     ./setup
 
 # Compile nginx
-RUN cd /tmp/nginx-${NGINX_VERSION} && \
+RUN cd /tmp/nginx-$NGINX_VERSION && \
     ./configure \
       --prefix=/opt/nginx \
       --conf-path=/etc/nginx/nginx.conf \
@@ -64,7 +64,7 @@ RUN cd /tmp/nginx-${NGINX_VERSION} && \
       --with-http_stub_status_module \
       --with-http_perl_module \
       --with-pcre \
-      --add-module=/tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} && \
+      --add-module=/tmp/ngx_small_light-$NGX_SMALL_LIGHT_VERSION && \
     make && \
     make install && \
     rm -rf /tmp/*
