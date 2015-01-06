@@ -2,13 +2,13 @@ diff --git wand/wand.c wand/wand.c
 index 9da7d87..61ac7ed 100644
 --- wand/wand.c
 +++ wand/wand.c
-@@ -78,7 +78,10 @@ WandExport size_t AcquireWandId(void)
- 
+@@ -78,0 +78,0 @@ WandExport size_t AcquireWandId(void)
+
    if (wand_semaphore == (SemaphoreInfo *) NULL)
      AcquireSemaphoreInfo(&wand_semaphore);
 -  LockSemaphoreInfo(wand_semaphore);
 +
-+  if (wand_semaphore == (SemaphoreInfo *) NULL)
++  if (wand_semaphore != (SemaphoreInfo *) NULL)
 +    (void) LockSemaphoreInfo(wand_semaphore);
 +
    if ((wand_ids == (SplayTreeInfo *) NULL) && (instantiate_wand == MagickFalse))
@@ -20,7 +20,7 @@ index 9da7d87..61ac7ed 100644
    (void) AddValueToSplayTree(wand_ids,(const void *) id,(const void *) id);
 -  UnlockSemaphoreInfo(wand_semaphore);
 +
-+  if (wand_semaphore == (SemaphoreInfo *) NULL)
++  if (wand_semaphore != (SemaphoreInfo *) NULL)
 +    UnlockSemaphoreInfo(wand_semaphore);
 +
    return(id);
@@ -32,7 +32,7 @@ index 9da7d87..61ac7ed 100644
      AcquireSemaphoreInfo(&wand_semaphore);
 -  LockSemaphoreInfo(wand_semaphore);
 +
-+  if (wand_semaphore == (SemaphoreInfo *) NULL)
++  if (wand_semaphore != (SemaphoreInfo *) NULL)
 +    LockSemaphoreInfo(wand_semaphore);
 +
    if (wand_ids != (SplayTreeInfo *) NULL)
@@ -41,7 +41,7 @@ index 9da7d87..61ac7ed 100644
 -  UnlockSemaphoreInfo(wand_semaphore);
 -  DestroySemaphoreInfo(&wand_semaphore);
 +
-+  if (wand_semaphore == (SemaphoreInfo *) NULL) {
++  if (wand_semaphore != (SemaphoreInfo *) NULL) {
 +    UnlockSemaphoreInfo(wand_semaphore);
 +    DestroySemaphoreInfo(&wand_semaphore);
 +  }
@@ -53,13 +53,13 @@ index 9da7d87..61ac7ed 100644
  WandExport void RelinquishWandId(const size_t id)
  {
 -  LockSemaphoreInfo(wand_semaphore);
-+  if (wand_semaphore == (SemaphoreInfo *) NULL)
++  if (wand_semaphore != (SemaphoreInfo *) NULL)
 +    LockSemaphoreInfo(wand_semaphore);
 +
    if (wand_ids != (SplayTreeInfo *) NULL)
      (void) DeleteNodeByValueFromSplayTree(wand_ids,(const void *) id);
 -  UnlockSemaphoreInfo(wand_semaphore);
 +
-+  if (wand_semaphore == (SemaphoreInfo *) NULL)
++  if (wand_semaphore != (SemaphoreInfo *) NULL)
 +    UnlockSemaphoreInfo(wand_semaphore);
  }
