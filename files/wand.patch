@@ -1,0 +1,65 @@
+diff --git wand/wand.c wand/wand.c
+index 9da7d87..61ac7ed 100644
+--- wand/wand.c
++++ wand/wand.c
+@@ -78,7 +78,10 @@ WandExport size_t AcquireWandId(void)
+ 
+   if (wand_semaphore == (SemaphoreInfo *) NULL)
+     AcquireSemaphoreInfo(&wand_semaphore);
+-  LockSemaphoreInfo(wand_semaphore);
++
++  if (wand_semaphore == (SemaphoreInfo *) NULL)
++    (void) LockSemaphoreInfo(wand_semaphore);
++
+   if ((wand_ids == (SplayTreeInfo *) NULL) && (instantiate_wand == MagickFalse))
+     {
+       wand_ids=NewSplayTree((int (*)(const void *,const void *)) NULL,
+@@ -87,7 +90,10 @@ WandExport size_t AcquireWandId(void)
+     }
+   id++;
+   (void) AddValueToSplayTree(wand_ids,(const void *) id,(const void *) id);
+-  UnlockSemaphoreInfo(wand_semaphore);
++
++  if (wand_semaphore == (SemaphoreInfo *) NULL)
++    UnlockSemaphoreInfo(wand_semaphore);
++
+   return(id);
+ }
+ 
+@@ -115,12 +121,18 @@ WandExport void DestroyWandIds(void)
+ {
+   if (wand_semaphore == (SemaphoreInfo *) NULL)
+     AcquireSemaphoreInfo(&wand_semaphore);
+-  LockSemaphoreInfo(wand_semaphore);
++
++  if (wand_semaphore == (SemaphoreInfo *) NULL)
++    LockSemaphoreInfo(wand_semaphore);
++
+   if (wand_ids != (SplayTreeInfo *) NULL)
+     wand_ids=DestroySplayTree(wand_ids);
+   instantiate_wand=MagickFalse;
+-  UnlockSemaphoreInfo(wand_semaphore);
+-  DestroySemaphoreInfo(&wand_semaphore);
++
++  if (wand_semaphore == (SemaphoreInfo *) NULL) {
++    UnlockSemaphoreInfo(wand_semaphore);
++    DestroySemaphoreInfo(&wand_semaphore);
++  }
+ }
+ 
+ /*
+@@ -147,8 +159,12 @@ WandExport void DestroyWandIds(void)
+ */
+ WandExport void RelinquishWandId(const size_t id)
+ {
+-  LockSemaphoreInfo(wand_semaphore);
++  if (wand_semaphore == (SemaphoreInfo *) NULL)
++    LockSemaphoreInfo(wand_semaphore);
++
+   if (wand_ids != (SplayTreeInfo *) NULL)
+     (void) DeleteNodeByValueFromSplayTree(wand_ids,(const void *) id);
+-  UnlockSemaphoreInfo(wand_semaphore);
++
++  if (wand_semaphore == (SemaphoreInfo *) NULL)
++    UnlockSemaphoreInfo(wand_semaphore);
+ }

@@ -19,6 +19,8 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # Build ImageMagick with WebP support
+COPY files/wand.patch /tmp/wand.patch
+
 RUN mkdir -p /tmp/imagemagick && \
     cd /tmp/imagemagick && \
     apt-get update && \
@@ -28,6 +30,7 @@ RUN mkdir -p /tmp/imagemagick && \
       ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz && \
     tar zxf ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz && \
     cd ImageMagick-${IMAGEMAGICK_VERSION} && \
+    patch -p0 < /tmp/wand.patch && \
     ./configure \
       --prefix=/usr \
       --sysconfdir=/etc \
