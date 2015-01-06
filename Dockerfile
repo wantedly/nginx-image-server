@@ -18,9 +18,10 @@ RUN apt-get update && \
       libperl-dev && \
     rm -rf /var/lib/apt/lists/*
 
-# Build ImageMagick with WebP support
+# Add monkey patch for ImageMagick to suppress semaphore error
 COPY files/wand.patch /tmp/wand.patch
 
+# Build ImageMagick with WebP support and monkey patch
 RUN mkdir -p /tmp/imagemagick && \
     cd /tmp/imagemagick && \
     apt-get update && \
