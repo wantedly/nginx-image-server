@@ -7,7 +7,7 @@ use warnings;
 sub handler {
   my $r = shift;
   my $uri = "/" . ($r->uri =~ /^\/small_light[^\/]*\/(.+)$/m)[0];
-  my $threshold = 500;
+  my $threshold = $r->variable("small_light_maximum_size");
 
   $r->log_error(100, $uri);
 
