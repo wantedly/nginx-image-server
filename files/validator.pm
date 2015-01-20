@@ -32,6 +32,9 @@ sub handler {
   }
 
   if ($bad_request) {
+    # to avoid ngx_small_light process and return 400
+    $r->send_http_header;
+
     return HTTP_BAD_REQUEST;
   }
 
