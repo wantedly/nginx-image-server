@@ -36,5 +36,28 @@ describe server(:target) do
       expect(response.body).to include("Active connections")
     end
   end
-end
 
+  describe http('http://target/local/small_light(dh=3600,da=l,ds=s,of=webp)/images/example.jpg') do
+    it "responds Bad Request 400" do
+      expect(response.status).to eq(400)
+    end
+  end
+
+  describe http('http://target/local/small_light(ch=3600,da=l,ds=s,of=webp)/images/example.jpg') do
+    it "responds Bad Request 400" do
+      expect(response.status).to eq(400)
+    end
+  end
+
+  describe http('http://target/local/small_light(dw=3600,da=l,ds=s,of=webp)/images/example.jpg') do
+    it "responds Bad Request 400" do
+      expect(response.status).to eq(400)
+    end
+  end
+
+  describe http('http://target/local/small_light(cw=3600,da=l,ds=s,of=webp)/images/example.jpg') do
+    it "responds Bad Request 400" do
+      expect(response.status).to eq(400)
+    end
+  end
+end
