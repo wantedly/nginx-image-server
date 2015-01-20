@@ -70,6 +70,7 @@ RUN cd /tmp/nginx-${NGINX_VERSION} && \
     rm -rf /tmp/*
 
 RUN mkdir -p /etc/nginx && \
+    mkdir -p /opt/nginx/perl/lib && \
     mkdir -p /var/run && \
     mkdir -p /etc/nginx/conf.d && \
     mkdir -p /var/www/nginx/cache && \
@@ -77,8 +78,9 @@ RUN mkdir -p /etc/nginx && \
     mkdir -p /var/www/nginx/tmp
 
 # Add config files
-COPY files/nginx.conf /etc/nginx/nginx.conf
-COPY files/mime.types /etc/nginx/mime.types
+COPY files/nginx.conf   /etc/nginx/nginx.conf
+COPY files/mime.types   /etc/nginx/mime.types
+COPY files/validator.pm /opt/nginx/perl/lib/validator.pm
 
 EXPOSE 80 8090
 
