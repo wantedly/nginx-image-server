@@ -9,10 +9,8 @@ sub handler {
   my $uri = "/" . ($r->uri =~ /^\/small_light[^\/]*\/(.+)$/m)[0];
   my $threshold = $r->variable("small_light_maximum_size");
 
-  $r->log_error(100, $uri);
-
   unless ($threshold) {
-    $r->log_error(100, "no threshold!");
+    $r->log_error(100, "small_light_maximum_size is not defined!");
     $r->internal_redirect($uri);
 
     return OK;
@@ -26,7 +24,7 @@ sub handler {
 
     if (grep(/^${key}$/, ("cw", "dw", "ch", "dh"))) {
       if ($value > $threshold) {
-        $r->log_error(100, "oversize!");
+        $r->log_error(100, "Invalid resize parameter, " . $key . ": " . $value);
         $bad_request = 1;
         last;
       }
@@ -34,7 +32,6 @@ sub handler {
   }
 
   if ($bad_request) {
-    $r->log_error(100, "bad request!");
     return HTTP_BAD_REQUEST;
   }
 
