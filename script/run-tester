@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Usage: script/run_tester
+# Usage: script/run-tester
 # Description: run tester container
 #
 
@@ -12,5 +12,6 @@ docker rm   tester > /dev/null 2>&1 || true
 docker run \
   --rm \
   --name tester \
+  -v $PWD/spec:/test/spec \
   -e TARGET_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' target) \
-  tester
+  quay.io/wantedly/infrataster

@@ -1,10 +1,10 @@
 #!/bin/sh
 #
-# Usage: script/run_locust <LOCUST_ARGS>
+# Usage: script/run-locust <LOCUST_ARGS>
 # Description: run tester container
 # Example:
-#   script/run_locust -f locustfile.py -H localhost --no-web -c 10 -r 1 -n 30
-#   script/run_locust -f locustfile.py -H localhost
+#   script/run-locust -f locustfile.py -H localhost --no-web -c 10 -r 1 -n 30
+#   script/run-locust -f locustfile.py -H localhost
 #
 
 BASE_DIRECTORY=`pwd`
