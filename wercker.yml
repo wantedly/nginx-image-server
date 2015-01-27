@@ -6,11 +6,6 @@ build:
         code: |
           docker -v
     - script:
-        name: Build tester
-        code: |
-          cd ${WERCKER_SOURCE_DIR}/test/feature
-          docker build -t tester .
-    - script:
         name: Build target
         code: |
           cd ${WERCKER_SOURCE_DIR}

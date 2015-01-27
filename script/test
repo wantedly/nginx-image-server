@@ -10,10 +10,6 @@ set -e
 BASE_DIRECTORY=`pwd`
 SERVER_NAME="image.example.com"
 
-echo "==> Building tester..."
-cd ${BASE_DIRECTORY}/test/feature
-docker build -t tester .
-
 echo "==> Building target..."
 cd ${BASE_DIRECTORY}
 docker build -t target .
