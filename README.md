@@ -105,16 +105,16 @@ Test files are under `test/performance` directory. You can run locust with follw
 
 ```bash
 # Run target container
-$ script/run_target
+$ script/run-target
 
 # Export target IP
 $ export TARGET_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' target)
 
 # Run locust as WebTool
-$ script/run_locust -f locustfile.py -H http://${TARGET_IP}
+$ script/run-locust -f locustfile.py -H http://${TARGET_IP}
 
 # Run locust as CLI
-$ script/run_locust -f locustfile.py -H http://${TARGET_IP} --no-web -c 5 -r 1 -n 10
+$ script/run-locust -f locustfile.py -H http://${TARGET_IP} --no-web -c 5 -r 1 -n 10
 ```
 
 ## LICENSE

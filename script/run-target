@@ -1,9 +1,9 @@
 #!/bin/sh
 #
-# Usage: script/run_target <MODE>
+# Usage: script/run-target <MODE>
 # Description: run target container in the background
 # Example:
-#   $ script/run_target -d
+#   $ script/run-target -d
 #
 
 BASE_DIRECTORY=`pwd`

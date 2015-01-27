@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Usage: script/run_tester
+# Usage: script/run-tester
 # Description: run tester container
 #
 

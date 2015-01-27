@@ -15,10 +15,10 @@ cd ${BASE_DIRECTORY}
 docker build -t target .
 
 echo "==> Running target..."
-script/run_target -d
+script/run-target -d
 
 echo "==> Running tester..."
-script/run_tester
+script/run-tester
 
 echo "==> Cleaning up..."
 docker kill target > /dev/null 2>&1 || true
