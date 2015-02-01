@@ -9,3 +9,4 @@ Vagrantfile
 config.rb
 user-data.erb.yml
 user-data
+.env
