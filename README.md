@@ -88,11 +88,11 @@ $ vagrant ssh
 ```
 
 
-## TEST (experimentally)
+## TEST
 [![wercker status](https://app.wercker.com/status/e1d50221515bacea622f6a6f5f0adde6/s/master "wercker status")](https://app.wercker.com/project/bykey/e1d50221515bacea622f6a6f5f0adde6)
 
 ### Feature(behavior) test
-We're trying behavior test for this image using [infrataster](https://github.com/ryotarai/infrataster).
+Behavior test with [infrataster](https://github.com/ryotarai/infrataster).
 Test files are under `test/feature` directory. You can run this test with follwing script:
 
 ```bash
@@ -100,7 +100,7 @@ $ script/test
 ```
 
 ### Performance test
-We're trying performance test for this image using [locust](http://locust.io/).
+Performance test with [locust](http://locust.io/).
 Test files are under `test/performance` directory. You can run locust with follwing script:
 
 ```bash
