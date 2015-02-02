@@ -1,12 +1,10 @@
-.git
+.git/*
 .gitignore
 LICENSE
 README.md
 examples
-test
+test/*
 wercker.yml
-Vagrantfile
-config.rb
-user-data.erb.yml
-user-data
 .env
+coreos/*
+script/*
