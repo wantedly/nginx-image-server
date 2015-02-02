@@ -23,3 +23,7 @@ build:
         name: Run tester
         code: >
           script/run_tester
+  after-steps:
+    - wantedly/pretty-slack-notify:
+        webhook_url: $SLACK_WEBHOOK_URL
+        channel: $SLACK_CHANNEL
