@@ -1,7 +1,4 @@
 require "infrataster/rspec"
-require "dotenv"
-
-Dotenv.load
 
 Infrataster::Server.define(
   :target,
