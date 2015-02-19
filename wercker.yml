@@ -6,18 +6,18 @@ build:
         code: |
           docker -v
     - script:
-        name: Build target
+        name: Build quay.io/wantedly/nginx-image-server
         code: |
           cd ${WERCKER_SOURCE_DIR}
           docker build -t target .
     - script:
-        name: Run target
+        name: Run quay.io/wantedly/nginx-image-server
         code: >
-          script/run-target -d
+          script/run -d
     - script:
         name: Run tester
         code: >
-          script/run-tester
+          script/run-infrataster
   after-steps:
     - wantedly/pretty-slack-notify:
         webhook_url: $SLACK_WEBHOOK_URL

@@ -12,16 +12,20 @@ SERVER_NAME="image.example.com"
 
 echo "==> Building target..."
 cd ${BASE_DIRECTORY}
-docker build -t target .
+script/build
 
-echo "==> Running target..."
-script/run-target -d
+echo "==> Running nginx-image-server..."
+docker kill nginx-image-server > /dev/null 2>&1 || true
+docker rm   nginx-image-server > /dev/null 2>&1 || true
+docker kill infrataster > /dev/null 2>&1 || true
+docker rm   infrataster > /dev/null 2>&1 || true
+script/run -d
 
-echo "==> Running tester..."
-script/run-tester
+echo "==> Running test..."
+script/run-infrataster
 
 echo "==> Cleaning up..."
-docker kill target > /dev/null 2>&1 || true
-docker rm   target > /dev/null 2>&1 || true
-docker kill tester > /dev/null 2>&1 || true
-docker rm   tester > /dev/null 2>&1 || true
+docker kill nginx-image-server > /dev/null 2>&1 || true
+docker rm   nginx-image-server > /dev/null 2>&1 || true
+docker kill infrataster > /dev/null 2>&1 || true
+docker rm   infrataster > /dev/null 2>&1 || true
