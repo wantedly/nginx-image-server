@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 #
 # Usage: script/run-locust <LOCUST_ARGS>
 # Description: run tester container
