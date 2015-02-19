@@ -31,7 +31,7 @@ $ docker run \
     -v /tmp/example.jpg:/var/www/nginx/images/example.jpg \
     -e "SERVER_NAME=image.example.com" \
     -e "S3_HOST=<YOUR-BUCKET-NAME>.s3.amazonaws.com" \
-    quay.io/wantedly/nginx-image-server:lastest
+    quay.io/wantedly/nginx-image-server:latest
 ```
 
 Then you can try image-processing by accessing
