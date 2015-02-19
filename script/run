@@ -1,8 +1,9 @@
-#!/bin/sh
+#!/bin/bash
 #
-# Usage: script/run-target <MODE>
-# Description: run target container in the background
+# Usage: script/run <MODE>
+# Description: run nginx-image-server container
 # Example:
+#   $ script/run-target
 #   $ script/run-target -d
 #
 
@@ -20,10 +21,10 @@ docker kill target > /dev/null 2>&1 || true
 docker rm   target > /dev/null 2>&1 || true
 docker run \
   ${MODE} \
-  --name target \
+  --name nginx-image-server \
   -p 80:80 \
   -p 8090:8090 \
   -v ${BASE_DIRECTORY}/examples/example.jpg:/var/www/nginx/images/example.jpg \
   -e "SERVER_NAME=${SERVER_NAME}" \
   -e "S3_HOST=${S3_HOST}" \
-  target
+  quay.io/wantedly/nginx-image-server:latest
