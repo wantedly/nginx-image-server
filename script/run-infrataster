@@ -1,0 +1,17 @@
+#!/bin/bash
+#
+# Usage: script/run-infrataster
+# Description: run infrataster container
+#
+
+BASE_DIRECTORY=`pwd`
+
+cd ${BASE_DIRECTORY}/test/feature
+docker kill tester > /dev/null 2>&1 || true
+docker rm   tester > /dev/null 2>&1 || true
+docker run \
+  --rm \
+  --name infrataster \
+  -v $PWD/spec:/test/spec \
+  -e TARGET_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' nginx-image-server) \
+  quay.io/wantedly/infrataster:latest
