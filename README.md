@@ -31,7 +31,7 @@ $ docker run \
     -v /tmp/example.jpg:/var/www/nginx/images/example.jpg \
     -e "SERVER_NAME=image.example.com" \
     -e "S3_HOST=<YOUR-BUCKET-NAME>.s3.amazonaws.com" \
-    quay.io/wantedly/nginx-image-server
+    quay.io/wantedly/nginx-image-server:latest
 ```
 
 Then you can try image-processing by accessing
@@ -83,7 +83,7 @@ $ vi Dockerfile
 # login to VM and test it
 $ vagrant ssh
 @core-01 $ cd share
-@core-01 $ docker build -t target .
+@core-01 $ docker build -t=quay.io/wantedly/nginx-image-server .
 @core-01 $ script/test
 ```
 
@@ -108,7 +108,7 @@ Test files are under `test/performance` directory. You can run locust with follw
 $ script/run-target
 
 # Export target IP
-$ export TARGET_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' target)
+$ export TARGET_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' nginx-image-server)
 
 # Run locust as WebTool
 $ script/run-locust -f locustfile.py -H http://${TARGET_IP}
