@@ -9,7 +9,7 @@ build:
         name: Build quay.io/wantedly/nginx-image-server
         code: |
           cd ${WERCKER_SOURCE_DIR}
-          docker build -t target .
+          docker build -t quay.io/wantedly/nginx-image-server .
     - script:
         name: Run quay.io/wantedly/nginx-image-server
         code: >
