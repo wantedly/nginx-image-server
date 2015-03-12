@@ -19,6 +19,5 @@ docker run \
   --name locust \
   -p 8089:8089 \
   -v ${BASE_DIRECTORY}/test/performance:/test \
-  locust \
-  locust \
+  quay.io/wantedly/locust:latest \
   ${LOCUST_ARGS}
