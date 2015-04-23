@@ -2,7 +2,7 @@ FROM quay.io/wantedly/buildpack-deps:14.04
 MAINTAINER Seigo Uchida <spesnova@gmail.com> (@spesnova)
 
 ENV NGINX_VERSION 1.6.2
-ENV NGX_SMALL_LIGHT_VERSION 0.6.6
+ENV NGX_SMALL_LIGHT_VERSION 0.6.8
 ENV IMAGEMAGICK_VERSION 6.8.6-8
 
 # Install dependency packages
