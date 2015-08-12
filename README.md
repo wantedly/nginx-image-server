@@ -105,7 +105,7 @@ Test files are under `test/performance` directory. You can run locust with follw
 
 ```bash
 # Run target container
-$ script/run-target
+$ script/run
 
 # Export target IP
 $ export TARGET_IP=$(docker inspect --format '{{ .NetworkSettings.IPAddress }}' nginx-image-server)
