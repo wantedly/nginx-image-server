@@ -1,0 +1,11 @@
+sudo: required
+services:
+- docker
+script:
+- docker -v
+- docker build -t quay.io/wantedly/nginx-image-server .
+- script/run -d
+- script/run-infrataster
+notifications:
+  slack:
+    secure: Mth3GJaqzM7o4dC5X7sDts1g8dQr/62XQOBRnt95rw8XS7rUj1H2UtBA50olN7HXs9J1hPXnAoiydFGoSsgS34VnOObLNb4YFAVw45ZH6DAIueniA2k1sMFsaDD6mz9o3wV+Jyd4tDZ61NkvlJAfhs6eJSUG6dXeUqLGSom5OA4=
