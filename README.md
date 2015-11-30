@@ -1,4 +1,7 @@
-# Nginx Image Server [![Docker Repository on Quay.io](https://quay.io/repository/wantedly/nginx-image-server/status "Docker Repository on Quay.io")](https://quay.io/repository/wantedly/nginx-image-server)
+# Nginx Image Server
+[![Docker Repository on Quay.io](https://quay.io/repository/wantedly/nginx-image-server/status "Docker Repository on Quay.io")](https://quay.io/repository/wantedly/nginx-image-server)
+[![Build Status](https://travis-ci.org/wantedly/nginx-image-server.svg)](https://travis-ci.org/wantedly/nginx-image-server)
+
 Docker Image for [Nginx](http://nginx.org/) server for image processing with [ngx_small_light](https://github.com/cubicdaiya/ngx_small_light).
 It supports resizing/cropping/formatting (`png`, `webp`...etc) of images stored in local storages or AWS S3.
 
