@@ -1,5 +1,4 @@
-FROM quay.io/wantedly/buildpack-deps:14.04
-MAINTAINER Seigo Uchida <spesnova@gmail.com> (@spesnova)
+FROM ubuntu:14.04
 
 ENV NGINX_VERSION 1.6.2
 ENV NGX_SMALL_LIGHT_VERSION 0.6.8
@@ -11,11 +10,13 @@ RUN apt-get update && \
       binutils-doc \
       bison \
       flex \
+      g++ \
       gettext \
       libpcre3 \
       libpcre3-dev \
       libssl-dev \
-      libperl-dev && \
+      libperl-dev \
+      make && \
     rm -rf /var/lib/apt/lists/*
 
 # Build ImageMagick with WebP support
