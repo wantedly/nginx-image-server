@@ -2,6 +2,7 @@ FROM ubuntu:14.04
 
 ENV NGINX_VERSION 1.10.0
 ENV NGX_SMALL_LIGHT_VERSION 0.8.0
+ENV NGX_AWS_AUTH_VERSION 1.1.1
 ENV IMAGEMAGICK_VERSION 6.8.6-8
 
 # Install dependency packages
@@ -56,6 +57,11 @@ RUN curl -L https://github.com/cubicdaiya/ngx_small_light/archive/v${NGX_SMALL_L
     cd /tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} && \
     ./setup
 
+# Fetch and unarchive ngx_aws_auth module
+RUN curl -L https://github.com/anomalizer/ngx_aws_auth/archive/${NGX_AWS_AUTH_VERSION}.tar.gz > /tmp/ngx_aws_auth-${NGX_AWS_AUTH_VERSION}.tar.gz && \
+    cd /tmp && \
+    tar zxf ngx_aws_auth-${NGX_AWS_AUTH_VERSION}.tar.gz
+
 # Compile nginx
 RUN cd /tmp/nginx-${NGINX_VERSION} && \
     ./configure \
@@ -66,6 +72,7 @@ RUN cd /tmp/nginx-${NGINX_VERSION} && \
       --with-http_perl_module \
       --with-pcre \
       --add-module=/tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} && \
+      --add-module=/tmp/ngx_aws_auth-${NGX_AWS_AUTH_VERSION} && \
     make && \
     make install && \
     rm -rf /tmp/*
