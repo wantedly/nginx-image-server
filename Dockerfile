@@ -71,7 +71,7 @@ RUN cd /tmp/nginx-${NGINX_VERSION} && \
       --with-http_stub_status_module \
       --with-http_perl_module \
       --with-pcre \
-      --add-module=/tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} && \
+      --add-module=/tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} \
       --add-module=/tmp/ngx_aws_auth-${NGX_AWS_AUTH_VERSION} && \
     make && \
     make install && \
