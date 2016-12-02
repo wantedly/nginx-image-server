@@ -11,6 +11,7 @@ RUN apt-get update && \
       bison \
       flex \
       g++ \
+      git \
       gettext \
       libpcre3 \
       libpcre3-dev \
@@ -49,12 +50,25 @@ RUN curl -L http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz > /tmp/nginx
     cd /tmp && \
     tar zxf nginx-${NGINX_VERSION}.tar.gz
 
+
 # Fetch and unarchive ngx_small_light module
 RUN curl -L https://github.com/cubicdaiya/ngx_small_light/archive/v${NGX_SMALL_LIGHT_VERSION}.tar.gz > /tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION}.tar.gz && \
     cd /tmp && \
     tar zxf ngx_small_light-${NGX_SMALL_LIGHT_VERSION}.tar.gz && \
     cd /tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} && \
     ./setup
+
+# Install rake, should be the beginning of Dockerfile
+RUN apt-get update &&\
+    apt-get install rake -y
+
+# Prepare ngx_mruby
+RUN cd /tmp && \
+    git clone https://github.com/matsumotory/ngx_mruby && \
+    cd ngx_mruby && \
+    ./configure --with-ngx-src-root=/tmp/nginx-${NGINX_VERSION} && \
+    make build_mruby && \
+    make generate_gems_config
 
 # Compile nginx
 RUN cd /tmp/nginx-${NGINX_VERSION} && \
@@ -65,7 +79,9 @@ RUN cd /tmp/nginx-${NGINX_VERSION} && \
       --with-http_stub_status_module \
       --with-http_perl_module \
       --with-pcre \
-      --add-module=/tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} && \
+      --add-module=/tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} \
+      --add-module=/tmp/ngx_mruby \
+      --add-module=/tmp/ngx_mruby/dependence/ngx_devel_kit && \
     make && \
     make install && \
     rm -rf /tmp/*
@@ -82,6 +98,7 @@ RUN mkdir -p /etc/nginx && \
 COPY files/nginx.conf   /etc/nginx/nginx.conf
 COPY files/mime.types   /etc/nginx/mime.types
 COPY files/validator.pm /opt/nginx/perl/lib/validator.pm
+COPY files/validator.rb /opt/nginx/ruby/lib/validator.rb
 
 EXPOSE 80 8090
 
