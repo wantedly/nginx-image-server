@@ -19,7 +19,10 @@ RUN apt-get update && \
       make && \
     rm -rf /var/lib/apt/lists/*
 
-# Build ImageMagick with WebP support
+# Add monkey patch for ImageMagick (wand/wand.c) to suppress semaphore error
+COPY files/wand.patch /tmp/wand.patch
+
+# Build ImageMagick with WebP support and monkey patch
 RUN mkdir -p /tmp/imagemagick && \
     cd /tmp/imagemagick && \
     apt-get update && \
@@ -29,6 +32,7 @@ RUN mkdir -p /tmp/imagemagick && \
       ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz && \
     tar zxf ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz && \
     cd ImageMagick-${IMAGEMAGICK_VERSION} && \
+    patch -p0 < /tmp/wand.patch && \
     ./configure \
       --prefix=/usr \
       --sysconfdir=/etc \
