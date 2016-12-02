@@ -49,11 +49,13 @@ RUN curl -L http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz > /tmp/nginx
     cd /tmp && \
     tar zxf nginx-${NGINX_VERSION}.tar.gz
 
+ENV NGX_SMALL_LIGHT_BRANCH avoid-semaphore-error
+
 # Fetch and unarchive ngx_small_light module
-RUN curl -L https://github.com/cubicdaiya/ngx_small_light/archive/v${NGX_SMALL_LIGHT_VERSION}.tar.gz > /tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION}.tar.gz && \
+RUN curl -L https://github.com/dtan4/ngx_small_light/archive/${NGX_SMALL_LIGHT_BRANCH}.zip > /tmp/ngx_small_light-${NGX_SMALL_LIGHT_BRANCH}.zip && \
     cd /tmp && \
-    tar zxf ngx_small_light-${NGX_SMALL_LIGHT_VERSION}.tar.gz && \
-    cd /tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} && \
+    unzip ngx_small_light-${NGX_SMALL_LIGHT_BRANCH}.zip && \
+    cd /tmp/ngx_small_light-${NGX_SMALL_LIGHT_BRANCH} && \
     ./setup
 
 # Compile nginx
@@ -65,7 +67,7 @@ RUN cd /tmp/nginx-${NGINX_VERSION} && \
       --with-http_stub_status_module \
       --with-http_perl_module \
       --with-pcre \
-      --add-module=/tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} && \
+      --add-module=/tmp/ngx_small_light-${NGX_SMALL_LIGHT_BRANCH} && \
     make && \
     make install && \
     rm -rf /tmp/*
