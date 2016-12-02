@@ -7,7 +7,9 @@ def handler
     uri_sp = uri_sp[1..-1]
   end
   # uri_sp is of form ["small_light(...)", "path", "to", "the", "image"]
-  params = uri_sp[0].split("small_light")
+  params = uri_sp[0].split("small_light")[1] # It should be "(a=b,c=d,e=f,...)"
+  params = params[1..-2] # It should be "a=b,c=d,e=f,..."
+  params = params.split(",") # It should be ["a=b","c=d","e=f",...]
   uri_sp = uri_sp[1..-1] # drop "small_light"
   # uri_sp is of form ["path", "to", "the", "image"]
   
@@ -17,6 +19,7 @@ def handler
   threshold = v.small_light_maximum_size
   puts "requested uri = #{uri}\n"
   puts "redirected uri = #{uri_redir}\n"
+  puts "params = #{params}"
   puts "threshold = #{threshold}\n"
   puts "threshold.class = #{threshold.class}\n"
   
@@ -27,26 +30,27 @@ def handler
     Nginx.return Nginx::OK
     return
   end
+  threshold = threshold.to_i
 
   bad_request = false
 
-#  This snippet is from validator.pm, and not working.
-#
-#  for param in (@params) {
-#    key, value = param;
-#
-#    if (grep(/^${key}$/, ("cw", "dw", "ch", "dh"))) {
-#      if ($value > $threshold) {
-#        $r->log_error(100, "Invalid resize parameter, " . $key . ": " . $value);
-#        $bad_request = 1;
-#        last;
-#      }
-#    }
-#  }
+  for param in params
+    key, value = param.split("=")
 
-  
+    if ["cw", "dw", "ch", "dh"].index(key)
+      value = value.to_i
+      if value > threshold
+        Nginx::errlogger(Nginx::LOG_WARN, "Invalid resize parameter, " + key + ": " + value.to_s)
+        bad_request = true
+        break
+      end
+    end
+  end
+
+  # This routine seems to go wrong (415 Unsupported Media Type is returned)
   if bad_request
-    Nginx.return Nginx::BAD_REQUEST
+    Nginx.return Nginx::HTTP_BAD_REQUEST
+    return
   end
   
   Nginx.redirect uri_redir
