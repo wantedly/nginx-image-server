@@ -16,7 +16,6 @@ RUN apt-get update && \
       libpcre3 \
       libpcre3-dev \
       libssl-dev \
-      libperl-dev \
       make \
       rake && \
     rm -rf /var/lib/apt/lists/*
@@ -75,7 +74,6 @@ RUN cd /tmp/nginx-${NGINX_VERSION} && \
       --conf-path=/etc/nginx/nginx.conf \
       --sbin-path=/opt/nginx/sbin/nginx \
       --with-http_stub_status_module \
-      --with-http_perl_module \
       --with-pcre \
       --add-module=/tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} \
       --add-module=/tmp/ngx_mruby \
@@ -85,7 +83,7 @@ RUN cd /tmp/nginx-${NGINX_VERSION} && \
     rm -rf /tmp/*
 
 RUN mkdir -p /etc/nginx && \
-    mkdir -p /opt/nginx/perl/lib && \
+    mkdir -p /opt/nginx/ruby/lib && \
     mkdir -p /var/run && \
     mkdir -p /etc/nginx/conf.d && \
     mkdir -p /var/www/nginx/cache && \
@@ -95,7 +93,6 @@ RUN mkdir -p /etc/nginx && \
 # Add config files
 COPY files/nginx.conf   /etc/nginx/nginx.conf
 COPY files/mime.types   /etc/nginx/mime.types
-COPY files/validator.pm /opt/nginx/perl/lib/validator.pm
 COPY files/validator.rb /opt/nginx/ruby/lib/validator.rb
 COPY files/400.rb /opt/nginx/ruby/lib/400.rb
 
