@@ -11,13 +11,14 @@ RUN apt-get update && \
       bison \
       flex \
       g++ \
-      git \
       gettext \
+      git \
       libpcre3 \
       libpcre3-dev \
       libssl-dev \
       libperl-dev \
-      make && \
+      make \
+      rake && \
     rm -rf /var/lib/apt/lists/*
 
 # Build ImageMagick with WebP support
@@ -58,9 +59,6 @@ RUN curl -L https://github.com/cubicdaiya/ngx_small_light/archive/v${NGX_SMALL_L
     cd /tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} && \
     ./setup
 
-# Install rake, should be the beginning of Dockerfile
-RUN apt-get update &&\
-    apt-get install rake -y
 
 # Prepare ngx_mruby
 RUN cd /tmp && \
