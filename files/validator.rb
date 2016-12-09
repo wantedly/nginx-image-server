@@ -17,11 +17,6 @@ def handler
   uri_redir = "/" + uri_sp.join("/") # redirected uri
   v = Nginx::Var.new
   threshold = v.small_light_maximum_size
-  puts "requested uri = #{uri}\n"
-  puts "redirected uri = #{uri_redir}\n"
-  puts "params = #{params}"
-  puts "threshold = #{threshold}\n"
-  puts "threshold.class = #{threshold.class}\n"
   
   if threshold == "" # TODO not sure it's working
     Nginx.errlogger(Nginx::LOG_NOTICE, "small_light_maximum_size is not defined!") # TODO the magic number "100" is used in the original code, but its meaning is unclear, so we use LOG_NOTICE.
@@ -47,9 +42,9 @@ def handler
     end
   end
 
-  # This routine seems to go wrong (415 Unsupported Media Type is returned)
+  # Bad Request. It is handled separately in nginx.conf (by using error_page 400).
   if bad_request
-    Nginx.return Nginx::HTTP_BAD_REQUEST
+    Nginx.send_header Nginx::HTTP_BAD_REQUEST
     return
   end
   
