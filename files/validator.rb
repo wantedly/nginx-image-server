@@ -1,26 +1,12 @@
 def handler
   req = Nginx::Request.new
   uri = req.uri # of form .*/small_light[^\/]*/.*
-  # In the original script, a regexp was used. However, we avoid using it, because mruby doesn't have regexp default.
-  uri_sp = uri.split("/")[1..-1]
-  if uri_sp[0] == "local" # /local/small_light/...
-    uri_sp = uri_sp[1..-1]
-  end
-  # uri_sp is of form ["small_light(...)", "path", "to", "the", "image"]
-  params = uri_sp[0].split("small_light")[1] # It should be "(a=b,c=d,e=f,...)"
-  params = params[1..-2] # It should be "a=b,c=d,e=f,..."
-  params = params.split(",") # It should be ["a=b","c=d","e=f",...]
-  uri_sp = uri_sp[1..-1] # drop "small_light"
-  # uri_sp is of form ["path", "to", "the", "image"]
-  
-  
-  uri_redir = "/" + uri_sp.join("/") # redirected uri
   v = Nginx::Var.new
   threshold = v.small_light_maximum_size
-  
+
+  params, uri_redir = parse_uri(uri)
   if threshold == "" # TODO not sure it's working
     Nginx.errlogger(Nginx::LOG_NOTICE, "small_light_maximum_size is not defined!") # TODO the magic number "100" is used in the original code, but its meaning is unclear, so we use LOG_NOTICE.
-    puts "threshold is empty\n\n"
     Nginx.redirect uri_redir
     Nginx.return Nginx::OK
     return

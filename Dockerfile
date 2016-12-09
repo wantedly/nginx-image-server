@@ -95,6 +95,7 @@ COPY files/nginx.conf   /etc/nginx/nginx.conf
 COPY files/mime.types   /etc/nginx/mime.types
 COPY files/validator.rb /opt/nginx/ruby/lib/validator.rb
 COPY files/400.rb /opt/nginx/ruby/lib/400.rb
+COPY files/uri_parser.rb /opt/nginx/ruby/lib/uri_parser.rb
 
 EXPOSE 80 8090
 
