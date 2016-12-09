@@ -1,4 +1,4 @@
-load '../files/uri_parser.rb'
+load 'uri_parser.rb'
 
 class TestParseUri < Test::Unit::TestCase
   def test_parse_uri_local
