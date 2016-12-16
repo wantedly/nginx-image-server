@@ -5,8 +5,10 @@ def handler
   threshold = v.small_light_maximum_size
 
   params, uri_redir = parse_uri(uri)
-  if threshold == "" # TODO not sure it's working
-    Nginx.errlogger(Nginx::LOG_NOTICE, "small_light_maximum_size is not defined!") # TODO the magic number "100" is used in the original code, but its meaning is unclear, so we use LOG_NOTICE.
+  # If $small_light_maximum_size is not set, threshold will be
+  # nil or "" (an empty string).
+  if threshold == nil || threshold == ""
+    Nginx.errlogger(Nginx::LOG_NOTICE, "small_light_maximum_size is not defined!") # A magic number "100" is used in the original (Perl) code, but its meaning is unclear. Thus we use LOG_NOTICE.
     Nginx.redirect uri_redir
     Nginx.return Nginx::OK
     return
