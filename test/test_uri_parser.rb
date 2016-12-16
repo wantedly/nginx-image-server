@@ -10,4 +10,3 @@ class TestParseUri < Test::Unit::TestCase
                  parse_uri("/small_light(dh=500,da=l,ds=s)/images/example.jpg"))
   end
 end
-

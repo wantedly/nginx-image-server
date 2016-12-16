@@ -15,10 +15,10 @@ def handler
 
   bad_request = false
 
-  for param in params
+  params.each do |param|
     key, value = param.split("=")
 
-    if ["cw", "dw", "ch", "dh"].index(key)
+    if ["cw", "dw", "ch", "dh"].include?(key)
       value = value.to_i
       if value > threshold
         Nginx::errlogger(Nginx::LOG_WARN, "Invalid resize parameter, " + key + ": " + value.to_s)

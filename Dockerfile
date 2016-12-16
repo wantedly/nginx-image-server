@@ -50,7 +50,6 @@ RUN curl -L http://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz > /tmp/nginx
     cd /tmp && \
     tar zxf nginx-${NGINX_VERSION}.tar.gz
 
-
 # Fetch and unarchive ngx_small_light module
 RUN curl -L https://github.com/cubicdaiya/ngx_small_light/archive/v${NGX_SMALL_LIGHT_VERSION}.tar.gz > /tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION}.tar.gz && \
     cd /tmp && \

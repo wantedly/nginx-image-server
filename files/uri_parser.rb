@@ -11,8 +11,7 @@ def parse_uri(uri)
   params = params.split(",") # It should be ["a=b","c=d","e=f",...]
   uri_sp = uri_sp[1..-1] # drop "small_light"
   # uri_sp is of form ["path", "to", "the", "image"]
-  
-  
+
   uri_redir = "/" + uri_sp.join("/") # redirected uri
   [params, uri_redir]
 end
