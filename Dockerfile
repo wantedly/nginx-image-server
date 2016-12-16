@@ -6,6 +6,8 @@ ENV IMAGEMAGICK_VERSION 6.8.6-8
 ENV NGX_MRUBY_VERSION 1.18.7
 
 # Install dependency packages
+# git is needed by ngx_mruby 
+# rake is necessary, because ngx_mruby needs it
 RUN apt-get update && \
     apt-get install -y \
       binutils-doc \
