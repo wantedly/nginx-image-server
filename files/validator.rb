@@ -15,8 +15,6 @@ def handler
   end
   threshold = threshold.to_i
 
-  bad_request = false
-
   params.each do |param|
     key, value = param.split("=")
 
@@ -24,21 +22,15 @@ def handler
       value = value.to_i
       if value > threshold
         Nginx::errlogger(Nginx::LOG_WARN, "Invalid resize parameter, " + key + ": " + value.to_s)
-        bad_request = true
-        break
+        # Bad Request. It is handled separately in nginx.conf (by using error_page 400).
+        Nginx.return Nginx::HTTP_BAD_REQUEST
+        return
       end
     end
   end
 
-  # Bad Request. It is handled separately in nginx.conf (by using error_page 400).
-  if bad_request
-    Nginx.send_header Nginx::HTTP_BAD_REQUEST
-    return
-  end
-  
   Nginx.redirect uri_redir
   Nginx.return Nginx::OK
-  # Nginx.return Nginx::HTTP_FORBIDDEN
 end
 
 handler
