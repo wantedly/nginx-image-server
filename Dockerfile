@@ -3,6 +3,7 @@ FROM ubuntu:14.04
 ENV NGINX_VERSION 1.10.0
 ENV NGX_SMALL_LIGHT_VERSION 0.8.0
 ENV IMAGEMAGICK_VERSION 6.8.6-8
+ENV NGX_MRUBY_VERSION 1.18.7
 
 # Install dependency packages
 RUN apt-get update && \
@@ -57,11 +58,12 @@ RUN curl -L https://github.com/cubicdaiya/ngx_small_light/archive/v${NGX_SMALL_L
     cd /tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} && \
     ./setup
 
-
 # Prepare ngx_mruby
-RUN cd /tmp && \
-    git clone https://github.com/matsumotory/ngx_mruby && \
-    cd ngx_mruby && \
+RUN curl -L https://github.com/matsumotory/ngx_mruby/archive/v${NGX_MRUBY_VERSION}.tar.gz > /tmp/ngx_mruby-${NGX_MRUBY_VERSION}.tar.gz && \
+    cd /tmp && \
+    tar zxf ngx_mruby-${NGX_MRUBY_VERSION}.tar.gz && \
+    rm ngx_mruby-${NGX_MRUBY_VERSION}.tar.gz && \
+    cd /tmp/ngx_mruby-${NGX_MRUBY_VERSION} && \
     ./configure --with-ngx-src-root=/tmp/nginx-${NGINX_VERSION} && \
     make build_mruby && \
     make generate_gems_config
@@ -75,8 +77,8 @@ RUN cd /tmp/nginx-${NGINX_VERSION} && \
       --with-http_stub_status_module \
       --with-pcre \
       --add-module=/tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} \
-      --add-module=/tmp/ngx_mruby \
-      --add-module=/tmp/ngx_mruby/dependence/ngx_devel_kit && \
+      --add-module=/tmp/ngx_mruby-${NGX_MRUBY_VERSION} \
+      --add-module=/tmp/ngx_mruby-${NGX_MRUBY_VERSION}/dependence/ngx_devel_kit && \
     make && \
     make install && \
     rm -rf /tmp/*
