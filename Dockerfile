@@ -23,6 +23,7 @@ RUN apt-get update && \
 RUN mkdir -p /tmp/imagemagick && \
     cd /tmp/imagemagick && \
     apt-get update && \
+    echo "deb-src http://archive.ubuntu.com/ubuntu/ trusty main restricted" >> /etc/apt/sources.list && \
     apt-get build-dep -y imagemagick && \
     apt-get install -y libwebp-dev devscripts checkinstall && \
     curl -L https://launchpad.net/imagemagick/main/${IMAGEMAGICK_VERSION}/+download/ImageMagick-${IMAGEMAGICK_VERSION}.tar.gz > \
