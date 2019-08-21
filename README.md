@@ -10,9 +10,9 @@ Please see https://github.com/cubicdaiya/ngx_small_light for more information ab
 ## SUPPORTED TAGS
 
 * `latest`
- * Nginx 1.10.0
- * ngx_small_light 0.8.0
- * ImageMagick 6.8.6-8 (Q16) with WebP support
+  * Nginx 1.10.0
+  * ngx_small_light 0.9.1
+  * ImageMagick 6.8.6-8 (Q16) with WebP support
 
 ## HOW TO USE
 

@@ -1,7 +1,7 @@
 FROM ubuntu:14.04
 
 ENV NGINX_VERSION 1.10.0
-ENV NGX_SMALL_LIGHT_VERSION 0.8.0
+ENV NGX_SMALL_LIGHT_VERSION 0.9.1
 ENV IMAGEMAGICK_VERSION 6.8.6-8
 
 # Install dependency packages
@@ -22,6 +22,7 @@ RUN apt-get update && \
 # Build ImageMagick with WebP support
 RUN mkdir -p /tmp/imagemagick && \
     cd /tmp/imagemagick && \
+    echo "\ndeb-src http://archive.ubuntu.com/ubuntu/ trusty main restricted" >> /etc/apt/sources.list && \
     apt-get update && \
     apt-get build-dep -y imagemagick && \
     apt-get install -y libwebp-dev devscripts checkinstall && \
