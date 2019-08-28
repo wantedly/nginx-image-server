@@ -4,6 +4,7 @@ services:
 script:
 - docker -v
 - docker build -t quay.io/wantedly/nginx-image-server .
+- ruby test/run_test.rb
 - script/run -d
 - script/run-infrataster
 notifications:

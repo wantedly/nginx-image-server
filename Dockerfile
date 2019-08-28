@@ -3,8 +3,11 @@ FROM ubuntu:14.04
 ENV NGINX_VERSION 1.10.0
 ENV NGX_SMALL_LIGHT_VERSION 0.9.1
 ENV IMAGEMAGICK_VERSION 6.8.6-8
+ENV NGX_MRUBY_VERSION 1.18.7
 
 # Install dependency packages
+# git is needed by ngx_mruby 
+# rake is necessary, because ngx_mruby needs it
 RUN apt-get update && \
     apt-get install -y \
       binutils-doc \
@@ -12,11 +15,12 @@ RUN apt-get update && \
       flex \
       g++ \
       gettext \
+      git \
       libpcre3 \
       libpcre3-dev \
       libssl-dev \
-      libperl-dev \
-      make && \
+      make \
+      rake && \
     rm -rf /var/lib/apt/lists/*
 
 # Build ImageMagick with WebP support
@@ -57,6 +61,16 @@ RUN curl -L https://github.com/cubicdaiya/ngx_small_light/archive/v${NGX_SMALL_L
     cd /tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} && \
     ./setup
 
+# Prepare ngx_mruby
+RUN curl -L https://github.com/matsumotory/ngx_mruby/archive/v${NGX_MRUBY_VERSION}.tar.gz > /tmp/ngx_mruby-${NGX_MRUBY_VERSION}.tar.gz && \
+    cd /tmp && \
+    tar zxf ngx_mruby-${NGX_MRUBY_VERSION}.tar.gz && \
+    rm ngx_mruby-${NGX_MRUBY_VERSION}.tar.gz && \
+    cd /tmp/ngx_mruby-${NGX_MRUBY_VERSION} && \
+    ./configure --with-ngx-src-root=/tmp/nginx-${NGINX_VERSION} && \
+    make build_mruby && \
+    make generate_gems_config
+
 # Compile nginx
 RUN cd /tmp/nginx-${NGINX_VERSION} && \
     ./configure \
@@ -64,15 +78,16 @@ RUN cd /tmp/nginx-${NGINX_VERSION} && \
       --conf-path=/etc/nginx/nginx.conf \
       --sbin-path=/opt/nginx/sbin/nginx \
       --with-http_stub_status_module \
-      --with-http_perl_module \
       --with-pcre \
-      --add-module=/tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} && \
+      --add-module=/tmp/ngx_small_light-${NGX_SMALL_LIGHT_VERSION} \
+      --add-module=/tmp/ngx_mruby-${NGX_MRUBY_VERSION} \
+      --add-module=/tmp/ngx_mruby-${NGX_MRUBY_VERSION}/dependence/ngx_devel_kit && \
     make && \
     make install && \
     rm -rf /tmp/*
 
 RUN mkdir -p /etc/nginx && \
-    mkdir -p /opt/nginx/perl/lib && \
+    mkdir -p /opt/nginx/ruby/lib && \
     mkdir -p /var/run && \
     mkdir -p /etc/nginx/conf.d && \
     mkdir -p /var/www/nginx/cache && \
@@ -82,7 +97,8 @@ RUN mkdir -p /etc/nginx && \
 # Add config files
 COPY files/nginx.conf   /etc/nginx/nginx.conf
 COPY files/mime.types   /etc/nginx/mime.types
-COPY files/validator.pm /opt/nginx/perl/lib/validator.pm
+COPY files/validator.rb /opt/nginx/ruby/lib/validator.rb
+COPY files/uri_parser.rb /opt/nginx/ruby/lib/uri_parser.rb
 
 EXPOSE 80 8090
 
